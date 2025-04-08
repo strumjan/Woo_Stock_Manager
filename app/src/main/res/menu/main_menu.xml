@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_add_store"
+        android:title="@string/add_new_store"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_store_list"
+        android:title="@string/store_list"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_remove_store"
+        android:title="@string/remove_store"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_exit"
+        android:title="@string/exit"
+        app:showAsAction="never" />
+</menu>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/editTextStoreName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/store_name"
+        android:autofillHints="Store Name"
+        android:minHeight="48dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="16dp"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/editTextBaseUrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/base_url"
+        android:autofillHints="Base URL"
+        android:minHeight="48dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="16dp"
+        android:inputType="textUri"/>
+
+    <EditText
+        android:id="@+id/editTextConsumerKey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/consumer_key"
+        android:autofillHints="Consumer Key"
+        android:minHeight="48dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="16dp"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/editTextConsumerSecret"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/consumer_secret"
+        android:autofillHints="Consumer Secret"
+        android:minHeight="48dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="16dp"
+        android:inputType="text"/>
+
+    <Button
+        android:id="@+id/buttonSaveStore"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/save" />
+
+    <Button
+        android:id="@+id/buttonCancel"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="@string/cancel" />
+
+</LinearLayout>
