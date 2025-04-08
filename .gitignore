@@ -1,15 +1,65 @@
+# Android Studio specific
+.idea/
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+*.ipr
+*.iws
+
+# Kotlin build folders
+/build/
+*/build/
+
+# Gradle
+.gradle/
+gradle-app.setting
+gradle-wrapper.jar
+gradle-wrapper.properties
+
+# Local configuration
 local.properties
+
+# Signing keys - DO NOT COMMIT!
+**/keystore.*
+**/*.jks
+**/*.keystore
+
+# Log files
+*.log
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Generated files
+/captures/
+/output/
+/*.apk
+/*.ap_
+
+# Crashlytics / Firebase
+crashlytics-build.properties
+fabric.properties
+
+# JetBrains IDEs
+.idea/
+*.iml
+
+# Unit test coverage
+*.ec
+
+# Android Studio Navigation Editor temp files
+.navigation/
+
+# Fastlane metadata, if used
+fastlane/report.xml
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# NDK
+.externalNativeBuild
+
+# Gradle Cache
+**/.gradle
+**/build/
+
+# Other
+*.hprof
