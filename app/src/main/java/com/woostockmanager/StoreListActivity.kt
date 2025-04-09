@@ -30,10 +30,28 @@ class StoreListActivity : AppCompatActivity() {
         listView.setOnItemClickListener { _, _, position, _ ->
             val storeName = stores[position]
 
-            val intent = Intent(this, ProductListActivity::class.java).apply {
-                putExtra("STORE_NAME", storeName)
-            }
-            startActivity(intent)
+//            val intent = Intent(this, ProductListActivity::class.java).apply {
+//                putExtra("STORE_NAME", storeName)
+//            }
+//            startActivity(intent)
+            val options = arrayOf("  >  Products", "  >  Orders")
+            AlertDialog.Builder(this)
+                .setTitle("Select what to show from $storeName:")
+                .setItems(options) { _, which ->
+                    when (which) {
+                        0 -> {
+                            val intent = Intent(this, ProductListActivity::class.java)
+                            intent.putExtra("STORE_NAME", storeName)
+                            startActivity(intent)
+                        }
+                        1 -> {
+                            val intent = Intent(this, OrdersListActivity::class.java)
+                            intent.putExtra("STORE_NAME", storeName)
+                            startActivity(intent)
+                        }
+                    }
+                }
+                .show()
         }
 
     }

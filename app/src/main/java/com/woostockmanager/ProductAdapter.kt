@@ -42,7 +42,7 @@ class ProductAdapter(
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
         holder.productName.text = product.name
-        holder.productCategory.text = "${product.category}"
+        holder.productCategory.text = product.category
         holder.stockQuantity.setText(product.stockQuantity.toString())
 
         // Highlight if it's the current search result

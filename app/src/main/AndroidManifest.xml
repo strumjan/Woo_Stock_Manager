@@ -29,6 +29,7 @@
         <activity android:name=".ProductListActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".RemoveStoreActivity" />
+        <activity android:name=".OrdersListActivity" />
     </application>
 
 </manifest>

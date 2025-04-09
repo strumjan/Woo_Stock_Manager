@@ -51,4 +51,11 @@
     <string name="no_match_found">No results found.</string>
     <string name="product_list">Product list</string>
     <string name="enter_quantity">Enter quantity</string>
+    <string name="orders_list">Orders list</string>
+    <string name="resend_notification">Resend notification</string>
+    <string name="order_number">Order #%1$d</string>
+    <string name="order_date">Date: %1$s</string>
+    <string name="order_status">Status: %1$s</string>
+    <string name="order_total">Total: %1$s %2$s </string>
+    <string name="no_orders_found">No orders found for selected period.</string>
 </resources>
