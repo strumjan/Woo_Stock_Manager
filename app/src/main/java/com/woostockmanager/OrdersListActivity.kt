@@ -160,18 +160,21 @@ class OrdersListActivity : AppCompatActivity() {
     }
 
     private fun resendOrderNotification(orderId: Int) {
-        val url = "$storeBaseUrl/wp-json/wc/v3/orders/$orderId/send?consumer_key=$consumerKey&consumer_secret=$consumerSecret"
+        val url = "$storeBaseUrl/wp-json/custom/v1/orders/$orderId/resend?consumer_key=$consumerKey&consumer_secret=$consumerSecret"
 
         val request = JsonObjectRequest(
             Request.Method.POST, url, null,
-            { _ ->
-                Toast.makeText(this, "Notification re-sent for order #$orderId", Toast.LENGTH_SHORT).show()
+            { response ->
+                val message = response.optString("message", "Notification sent successfully.")
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
             },
             { error ->
-                Toast.makeText(this, "Failed to resend notification: ${error.message}", Toast.LENGTH_LONG).show()
+                val errorMsg = error.message ?: "Unknown error"
+                Toast.makeText(this, "Failed to resend notification: $errorMsg", Toast.LENGTH_LONG).show()
             }
         )
 
         Volley.newRequestQueue(this).add(request)
     }
+
 }
