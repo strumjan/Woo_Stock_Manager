@@ -1,5 +1,6 @@
 package com.woostockmanager
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -33,6 +34,7 @@ class ProductListActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var productAdapter: ProductAdapter
     private lateinit var requestQueue: RequestQueue
+    private lateinit var requestQueuePurge: RequestQueue
     private val productList = mutableListOf<Product>()
     private lateinit var storeBaseUrl: String
     private lateinit var consumerKey: String
@@ -55,13 +57,20 @@ class ProductListActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerViewProducts)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        requestQueuePurge = Volley.newRequestQueue(this)
+        val btnPurge: Button = findViewById(R.id.btnPurge)
+        btnPurge.setOnClickListener {
+            fetchNonceAndPurgeAll()
+        }
+
         productAdapter = ProductAdapter(productList,
             object : ProductUpdateListener {
                 override fun onUpdateProduct(productId: Int, newQuantity: Int, newStockStatus: String) {
                     if (newQuantity != -1) {
                         updateProductQuantity(productId, newQuantity)
+                        hideKeyboard()
                     }
-                    updateProductStockStatus(productId, newStockStatus)
+                        updateProductStockStatus(productId, newStockStatus)
                 }
             }
         ) { product, position ->
@@ -167,7 +176,7 @@ class ProductListActivity : AppCompatActivity() {
             displayedProducts = mutableListOf()
         }
         val url = "$storeBaseUrl/wp-json/wc/v3/products?status=publish&per_page=100&page=$page" +
-                "&consumer_key=$consumerKey&consumer_secret=$consumerSecret"
+                "&_fields=id,name,categories,stock_quantity,stock_status&consumer_key=$consumerKey&consumer_secret=$consumerSecret"
 
         val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, url, null,
             { response ->
@@ -243,7 +252,15 @@ class ProductListActivity : AppCompatActivity() {
                 "?consumer_key=$consumerKey&consumer_secret=$consumerSecret"
 
         val jsonObject = JSONObject()
-        jsonObject.put("stock_quantity", newQuantity)
+        if (newQuantity > 0) {
+            jsonObject.put("stock_quantity", newQuantity)
+            jsonObject.put("manage_stock", true)
+            jsonObject.put("stock_status", "instock")
+        } else {
+            jsonObject.put("manage_stock", false)
+            jsonObject.put("stock_quantity", null) // Или може и да го изоставиш, но вака е експлицитно
+            jsonObject.put("stock_status", "instock") // или "outofstock" ако сакаш да се води како нема залиха
+        }
 
         val request = JsonObjectRequest(Request.Method.PUT, url, jsonObject,
             { response ->
@@ -345,5 +362,69 @@ class ProductListActivity : AppCompatActivity() {
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
+
+    private fun fetchNonceAndPurgeAll() {
+        val nonceUrl = "$storeBaseUrl/wp-json/custom/v1/get-nonce?consumer_key=$consumerKey&consumer_secret=$consumerSecret"
+
+        val nonceRequest = JsonObjectRequest(Request.Method.GET, nonceUrl, null,
+            Response.Listener { response ->
+                // Extract nonce from server response
+                val nonce = response.getString("_wpnonce")
+                purgeAll(nonce) // Call purgeAll with the retrieved nonce
+            },
+            Response.ErrorListener { error ->
+                val responseBody = error.networkResponse?.data
+                val errorMessage = if (responseBody != null) {
+                    try {
+                        val errorJson = JSONObject(String(responseBody))
+                        errorJson.getString("message")
+                    } catch (e: Exception) {
+                        "Failed to fetch nonce"
+                    }
+                } else {
+                    "Failed to fetch nonce"
+                }
+
+                Toast.makeText(this, getString(R.string.failed_nonce_fetch) + " $errorMessage", Toast.LENGTH_SHORT).show()
+            }
+        )
+
+        requestQueuePurge.add(nonceRequest)
+    }
+
+    private fun purgeAll(nonce: String) {
+        loadingProgressBar = findViewById(R.id.loadingProgressBar)
+        loadingProgressBar.visibility = View.VISIBLE  // Прикажи при прво вчитување
+
+        val url = "$storeBaseUrl/wp-json/custom/v1/flush-cache?consumer_key=$consumerKey&consumer_secret=$consumerSecret"
+        val params = HashMap<String, String>()
+        params["_wpnonce"] = nonce
+        val request = JsonObjectRequest(
+            Request.Method.POST, url, JSONObject(params),
+            { response ->
+                loadingProgressBar.visibility = View.GONE
+                val message = response.optString("message", getString(R.string.purge_all))
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                clearAppCache(this)
+            },
+            { error ->
+                loadingProgressBar.visibility = View.GONE
+                val errorMsg = error.message ?: "Unknown error"
+                Toast.makeText(this, getString(R.string.failed_purge_all) + " $errorMsg", Toast.LENGTH_SHORT).show()
+            }
+        )
+
+        Volley.newRequestQueue(this).add(request)
+    }
+
+    fun clearAppCache(context: Context) {
+        try {
+            val cacheDir = context.cacheDir
+            cacheDir?.deleteRecursively()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
 
 }

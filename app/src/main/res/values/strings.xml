@@ -58,4 +58,8 @@
     <string name="order_status">Status: %1$s</string>
     <string name="order_total">Total: %1$s %2$s </string>
     <string name="no_orders_found">No orders found for selected period.</string>
+    <string name="purge_all_only_for_w3_total_cache">Purge all (only for W3 TotalCache)</string>
+    <string name="purge_all">Purge all is completed.</string>
+    <string name="failed_purge_all">"Error when try to purge all: "</string>
+    <string name="failed_nonce_fetch">"Error nonce fetch: "</string>
 </resources>

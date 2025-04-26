@@ -11,6 +11,16 @@
         android:orientation="vertical"
         android:padding="12dp">
 
+        <Button
+            android:id="@+id/btnPurge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/red"
+            android:padding="8dp"
+            android:text="@string/purge_all_only_for_w3_total_cache"
+            android:textColor="@color/white" />
+
         <!-- Spinner за категории -->
         <Spinner
             android:id="@+id/categorySpinner"
